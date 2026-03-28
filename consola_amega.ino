@@ -23,7 +23,6 @@
   int jocSelectat = 0;   // 0 = Meniu, 1 = Snake, 2 = Tetris
   int menuSelection = 1; // Ce opțiune este selectată (1 sau 2)
 
-  // Matricea tablei de joc (0 = gol, 1-7 = blocuri blocate)
   int board[ROWS][COLS] = {0};
 
   // Cele 7 piese x 4 Rotații x 4 Rânduri x 4 Coloane
@@ -202,25 +201,22 @@
       if ((!gameStarted || dead) && digitalRead(BTN_LEFT) == LOW) {
           jocSelectat = 0;
           arataMeniu(true);
-          delay(500); // pauză ca să nu sară prin meniu
+          delay(500); 
           return;
       }
 
-      // 2. Start joc nou (Doar butonul DREAPTA)
       if (!gameStarted) {
         if (digitalRead(BTN_RIGHT) == LOW) {
           gameStarted = true;
           resetGame();
-          delay(200); // mic debouncing
+          delay(200); 
         }
         return;
       }
-
-      // 3. Restart după Game Over (Doar butonul DREAPTA)
       if (dead) {
         if (digitalRead(BTN_RIGHT) == LOW) {
           resetGame();
-          delay(200); // mic debouncing
+          delay(200); 
         }
         return;
       }
@@ -470,17 +466,16 @@
 
   void joacaTetris(){
     if (gameOver) {
-      // Aici doar citim butoanele, NU mai desenăm nimic pe ecran
       if (digitalRead(BTN_LEFT) == LOW) {
         jocSelectat = 0;
         arataMeniu(true);
         delay(500);
       }
       if (digitalRead(BTN_RIGHT) == LOW) {
-        startTetris(); // Resetăm jocul
+        startTetris(); 
         delay(500);
       }
-      return; // Ieșim imediat
+      return; 
     }
 
     if (!gameStarted) {
@@ -489,11 +484,11 @@
 
       if (digitalRead(BTN_RIGHT) == LOW) {
         gameStarted = true;
-        tft.setRotation(tetrisMode); // Aplicăm rotația aleasă!
+        tft.setRotation(tetrisMode); 
         resetTetris();
         delay(200);
       }
-      if (digitalRead(BTN_LEFT) == LOW) { // Înapoi la meniul principal
+      if (digitalRead(BTN_LEFT) == LOW) { 
         jocSelectat = 0;
         arataMeniu(true);
         delay(500);
@@ -549,8 +544,7 @@
     if (checkCollision(currentX, currentY, currentRotation)) {
         gameOver = true;
 
-      // Desenăm ecranul de moarte O SINGURĂ DATĂ
-      tft.setRotation(1); // Revenim la Landscape pentru mesajul de Game Over
+      tft.setRotation(1); 
       tft.fillScreen(TFT_BLACK);
 
       tft.setTextColor(TFT_RED);
@@ -624,7 +618,6 @@
         EEPROM.put(10, highscore_tetris);
       }
       
-      // --- CALCULĂM POZIȚIA CORECTĂ A SCORULUI ÎN FUNCȚIE DE MOD ---
       int offsetX = (tetrisMode == 0) ? 20 : (480 - (COLS * currentBlockSize)) / 2;
       int scoreX = offsetX + (COLS * currentBlockSize) + 20;
 
@@ -637,7 +630,6 @@
       tft.setTextColor(TFT_WHITE, TFT_BLACK); 
       tft.setTextSize(3);
       tft.print(highscore_tetris);
-      // -------------------------------------------------------------
 
       drawBoard();
     }
