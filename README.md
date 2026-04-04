@@ -10,5 +10,5 @@ This is a classic Snake game where your snake, score and speed increase after ea
 
 TETRIS
 
-This game follows the classic Tetris rules. It can be played both in portrait and in landscape mode. When a line is complete it is removed and the above pieces are moved down. The score as it is now is you get 10 pts. for a line removed, and when *at least* one line gets removed the speed increases. 
-What I intend to change is to show what the next piece you will get, to change the speed based on the score rather than lines removed, to give the player a score bonus multiplier for more lines removed at once and to implement another button used to hold a piece for later.
+This game follows the classic Tetris rules. It can be played both in portrait and in landscape mode. When a line is complete it is removed and the above pieces are moved down. The score as it is now is you get 10 pts. for a line removed, and when **at least** one line gets removed the speed increases. 
+What I intend to change is to show what the next piece you will get, to change the speed based on the score rather than lines removed, (to give the player a score bonus multiplier for more lines removed at once **DONE**) and to implement another button used to hold a piece for later.
