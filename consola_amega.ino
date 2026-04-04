@@ -592,7 +592,7 @@
   }
 
   void clearLines() {
-  bool linesClearedThisTurn = false;
+  int linesClearedThisTurn = 0;
 
   for (int y = ROWS - 1; y >= 0; y--) {
     bool fullLine = true;
@@ -602,7 +602,6 @@
     }
 
     if (fullLine) {
-      linesClearedThisTurn = true;
       for (int moveY = y; moveY > 0; moveY--) {
         for (int x = 0; x < COLS; x++) {
           board[moveY][x] = board[moveY - 1][x];
@@ -612,31 +611,52 @@
         board[0][x] = 0;
       }
       y++; 
-      scor_tetris = scor_tetris + 10;
-      if (scor_tetris >= highscore_tetris){
-        highscore_tetris = scor_tetris;
-        EEPROM.put(10, highscore_tetris);
-      }
-      
-      int offsetX = (tetrisMode == 0) ? 20 : (480 - (COLS * currentBlockSize)) / 2;
-      int scoreX = offsetX + (COLS * currentBlockSize) + 20;
-
-      tft.setCursor(scoreX + 10, 90);
-      tft.setTextColor(TFT_WHITE, TFT_BLACK); 
-      tft.setTextSize(3); 
-      tft.print(scor_tetris);
-      
-      tft.setCursor(scoreX + 10, 170);
-      tft.setTextColor(TFT_WHITE, TFT_BLACK); 
-      tft.setTextSize(3);
-      tft.print(highscore_tetris);
-
-      drawBoard();
+      linesClearedThisTurn++;
     }
   }
-  if(linesClearedThisTurn)
-    if(dropSpeed > 120)
-      dropSpeed -= 5;
+  if(linesClearedThisTurn > 0){
+    int multiplier = 0;
+    switch(linesClearedThisTurn){
+      case 1: multiplier = 1;
+              break;
+      case 2: multiplier = 2;
+              break;
+      case 3: multiplier = 2;
+              break;
+      case 4: multiplier = 3;
+              break;
+      case 5: multiplier = 5;
+              break;
+      default: multiplier = 1;
+    }
+    scor_tetris = scor_tetris + linesClearedThisTurn*10*multiplier;
+    if (scor_tetris >= highscore_tetris){
+      highscore_tetris = scor_tetris;
+      EEPROM.put(10, highscore_tetris);
+    }
+    if(scor_tetris >= 100 && scor_tetris < 200)       dropSpeed = 400;
+    else if(scor_tetris >= 200 && scor_tetris < 300)  dropSpeed = 360;
+    else if(scor_tetris >= 300 && scor_tetris < 400)  dropSpeed = 320;
+    else if(scor_tetris >= 400 && scor_tetris < 500)  dropSpeed = 280;
+    else if(scor_tetris >= 500 && scor_tetris < 600)  dropSpeed = 240;
+    else if(scor_tetris >= 600 && scor_tetris < 700)  dropSpeed = 200;
+    else if(scor_tetris >= 700 && scor_tetris < 1000) dropSpeed = 150;
+    else if(scor_tetris >= 1000)                      dropSpeed = 120;
+  
+    int offsetX = (tetrisMode == 0) ? 20 : (480 - (COLS * currentBlockSize)) / 2;
+    int scoreX = offsetX + (COLS * currentBlockSize) + 20;
+
+    tft.setCursor(scoreX + 10, 90);
+    tft.setTextColor(TFT_WHITE, TFT_BLACK); 
+    tft.setTextSize(3); 
+    tft.print(scor_tetris);
+
+    tft.setCursor(scoreX + 10, 170);
+    tft.setTextColor(TFT_WHITE, TFT_BLACK); 
+    tft.setTextSize(3);
+    tft.print(highscore_tetris);
+    drawBoard();
+  }
 }
 
   void drawPiece(int x, int y, int type, int rot, uint16_t color) {
